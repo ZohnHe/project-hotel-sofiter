@@ -1,0 +1,517 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    
+    <title></title>
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	
+<!--   <link rel="stylesheet" href="/static/css/roomset/roomset.css" type="text/css"></link> -->
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css" type="text/css"></link>
+  <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">  <!-- start 响应式布局要添加的 -->
+  <script src="/static/bootstrap/js/jquery-3.1.1.min.js"></script>
+  <script src="/static/bootstrap/js/bootstrap.js"></script>
+
+	  <!--踩坑 jqury.cdnserialize 在线资源-->
+	  <script src="https://cdn.bootcss.com/jquery.serializeJSON/2.8.0/jquery.serializejson.min.js"></script>
+   
+   <style>
+   
+   .container{
+     margin-top: 10px;
+   }
+   
+   .theadone{
+     background-color: #CCFF99;
+    }
+   
+   
+   .labelroomnumber{
+      position: relative;
+      font-size: 17px;
+      float: left;
+      margin-top: 15px;
+    }
+    
+    .marginrightone{
+      margin-right: 33px;
+    }
+    
+    .marginrighttwo{
+      margin-right: 16.5px;
+    }
+    
+    .marginrightthree{
+      margin-right: 43px;
+    }
+    
+   .textone{
+    margin-top:12px;
+    }
+    
+    .inputone{
+    width:54.2%;
+    }
+    
+    .inputtwo{
+      width:46.8%;
+    }
+    
+    .inputthree{
+      width:46.8%;
+    }
+    
+    .cboone{
+      margin-top:10px;
+      height: 27px;
+    }
+    
+    .margin-top-one{
+      margin-top: -10px;
+    }
+    
+    .margin-top-two{
+      margin-top: -20px;
+    }
+  
+    .textwidth{
+      width: 138px;
+    }
+    
+    .radiusone{
+     margin-left: -4px;
+    }
+    
+     @media(min-width:731px) and (max-width:767px){
+      .inputthree{
+      width: 50.5%;
+    }
+    }
+    
+    @media(min-width:550px) and (max-width:730px){
+      .inputtwo{
+      width: 46.2%;
+    }
+        .inputthree{
+      width: 49.2%;
+    }
+    }
+    
+    
+     @media(min-width:431px) and (max-width:550px){
+      .inputtwo{
+      width: 43.2%;
+    }
+      .inputthree{
+      width: 47.5%;
+    }
+    }
+    
+    @media(min-width:366px) and (max-width:430px){
+      .inputtwo{
+      width: 40.2%;
+    }
+      .inputthree{
+      width: 46%;
+    }
+    }
+    
+     @media(min-width:285px) and (max-width:366px){
+      .inputtwo{
+      width: 37.2%;
+    }
+      .inputthree{
+      width: 44%;
+    }
+    }
+    
+     @media(min-width:237px) and (max-width:285px){
+      .inputtwo{
+      width: 30%;
+    }
+      .inputthree{
+      width: 40%;
+    }
+    }
+    .span12{
+      width:95%;
+    }
+    .yansered{
+      color:red;
+    }
+  
+  </style>
+  
+  </head>
+  
+ 
+  <body > 
+  <div class="container" style="height:630px;overflow-x:auto;">
+  
+    <div class="span11" style=" border: solid; border-color: #DDDDDD;">
+    <div class="span9 margin-top-one">
+      <div class="row-fluid">
+        <h3 style="text-align: center;">旅客新增</h3>
+        
+      </div>
+    </div>
+    
+    <form id="passengerFrm">
+    <!--  ———————————————————————————————————————————————————————————————————————————————————————— -->
+	    <div class="span12">
+	      <div class="row-fluid">
+		     <div class="span3">
+		        <label>姓名：</label><!-- onchange="onchangeOne()"-->
+		        <input id="nameId" name="name" type="text" style="width:97%;height:27px;float:left;">
+		        <div id="divOne" style="float:right;">
+			         <label class="yansered" style="margin-top:7px;">*</label>
+			    </div> 
+		      </div>
+		     <div class="span3">
+		        <label>性别：</label>
+		        <select name="genderID" style="width:100%;height:27px;">
+		         <!--   <c:forEach items="${listGender}" var="item">
+			          <option value="${item.far_id}" <c:if test="${item.far_id==31}">selected="selected"</c:if>>
+			            ${item.attributeDetailsName}
+			          </option>
+			        </c:forEach> -->
+						<option id="man" selected="selected" value="31">男</option>
+						<option id="woman" value="32">女</option>
+		          </select>
+		     </div>
+		     <div class="span3">
+		        <label>出生日期：</label>
+		        <input id="birthDateId" name="birthDate" type="text" style="width:100%;height:27px;" placeholder="年-月-日"> 
+		     </div>
+		     <div class="span3">
+		        <label>民族：</label>
+		         <select name="nationID" style="width:100%;height:27px;">
+		           <!-- <c:forEach items="${listNation}" var="item">
+			          <option value="${item.far_id}" <c:if test="${item.far_id==33}">selected="selected"</c:if>>
+			            ${item.attributeDetailsName}
+			          </option>
+			        </c:forEach> -->
+					 <option selected="selected" value="33">汉</option>
+					 <option value="34">苗</option>
+					 <option value="35">壮</option>
+					 <option value="36">其他</option>
+		          </select>
+		     </div>
+		  </div>
+	    </div>
+	    <!--  ———————————————————————————————————————————————————————————————————————————————————————— -->
+	    <div class="span12">
+	      <div class="row-fluid">
+		     <div class="span3">
+		        <label>发证机关：</label>
+		        <input id="JGID" name="licenceIssuingAuthorty" type="text" style="width:100%;height:27px;"> 
+		     </div>
+		     <div class="span3">
+		        <label>证件有效期：</label>
+		        <input id="papersValidityId" name="papersValidity" type="text" style="width:100%;height:27px;"  placeholder="年-月-日 至 年-月-日"> 
+		      </div>
+		     <div class="span3">
+		        <label>职业：</label>
+		        <input id="professionId" name="profession" type="text" style="width:100%;height:27px;">
+		     </div>
+		     <div class="span3">
+		        <label>文化程度：</label>
+		         <select name="educationDegreeID" style="width:100%;height:27px;">
+		          <!--  <c:forEach items="${listEducationDegree}" var="item">
+			          <option value="${item.far_id}" <c:if test="${item.far_id==43}">selected="selected"</c:if>>
+			            ${item.attributeDetailsName}
+			          </option>
+			        </c:forEach> -->
+					 <option value="40">无</option>
+					 <option value="41">小学</option>
+					 <option value="42">初中</option>
+					 <option value="43" selected="selected">高中</option>
+					 <option value="44">大专</option>
+					 <option value="45">本科</option>
+					 <option value="46">研究生</option>
+					 <option value="47">硕士</option>
+					 <option value="48">博士</option>
+					 <option value="49">其他</option>
+		          </select>
+		     </div>
+		  </div>
+	    </div>
+	    <!--  ———————————————————————————————————————————————————————————————————————————————————————— -->
+	     <div class="span12">
+	      <div class="row-fluid">
+		     <div class="span3">
+		        <label>旅客级别：</label>
+		         <select name="passengerLevelID" style="width:100%;height:27px;">
+		           <!-- <c:forEach items="${listPassengerLevel}" var="item">
+			          <option value="${item.far_id}" <c:if test="${item.far_id==52}">selected="selected"</c:if>>
+			            ${item.attributeDetailsName}
+			          </option>
+			        </c:forEach> -->
+					 <option selected="selected" value="52">首次</option>
+					 <option value="53">熟客</option>
+					 <option value="54">VIP</option>
+		          </select>
+		     </div>
+		     <div class="span3">
+		        <label>证件类型：</label>
+		        <select id="papersId" name="papersID" style="width:100%;height:27px;">
+		            <!--<c:forEach items="${listPapers}" var="item">
+			          <option value="${item.far_id}" <c:if test="${item.far_id==37}">selected="selected"</c:if>>
+			            ${item.attributeDetailsName}
+			          </option>
+			        </c:forEach> -->
+					<option selected="selected" value="37">二代身份证</option>
+					<option value="38">护照</option>
+					<option value="39">其他</option>
+		          </select>
+		        
+		      </div>
+		     <div class="span3">
+		        <label>证件号码：</label><!--onblur="YZ(this.value)" onchange="onchangeOne()"-->
+		        <input id="papersNumberId" name="papersNumber" type="text"
+		         style="width:97%;height:27px;float:left;" >
+		        <div id="divTwo" style="float:right;">
+			         <label class="yansered" style="margin-top:7px;">*</label>
+			    </div> 
+		     </div>
+		     <div class="span3">
+		        <label>单位或住址：</label>
+		        <input id="unitsOrAddressId" name="unitsOrAddress" type="text" style="width:100%;height:27px;"> 
+		     </div>
+		  </div>
+	    </div>
+	   <!--  ———————————————————————————————————————————————————————————————————————————————————————— -->
+	    <div class="span12">
+	      <div class="row-fluid">
+		     <div class="span3">
+		        <label>事由：</label>
+		        <select name="thingReasonID" style="width:100%;height:27px;">
+		            <!--<c:forEach items="${listThingReason}" var="item">
+			          <option value="${item.far_id}" <c:if test="${item.far_id==51}">selected="selected"</c:if>>
+			            ${item.attributeDetailsName}
+			          </option>
+			        </c:forEach> -->
+					<option value="50">公务出差</option>
+					<option value="51" selected="selected">个人旅行</option>
+		          </select>
+		        
+		      </div>
+		     <div class="span3">
+		        <label>从何处来：</label>
+		       <input id="whereAreFromId" name="whereAreFrom" type="text" style="width:100%;height:27px;"> 
+		     </div>
+		     <div class="span3">
+		        <label>到哪里去：</label>
+		         <input id="whereToGoId" name="whereToGo" type="text" style="width:100%;height:27px;"> 
+		     </div>
+		     <div class="span3">
+		        <label>联系电话：</label>
+		         <input id="contactPhoneNumberId" name="contactPhoneNumber" type="text" 
+		         style="width:100%;height:27px;"  placeholder="只能为手机号码" onchange="onchangeOne()"> 
+		     </div>
+		  </div>
+	    </div>
+	    <!--  ———————————————————————————————————————————————————————————————————————————————————————— -->
+	    <div class="span12">
+	      <label style="float: left;">备注：</label>
+	      <input name="remarks" type="text" style="width:100%;height:27px;"> 
+	    </div>
+	    
+
+		  <div class="span6" style="text-align:center;">
+		      <div class="row-fluid">
+			      <div id="PassengerSub" class="span12" style="margin-top: 10px;margin-bottom: 8px;">
+				   	 <button  class="btn btn-primary" type="submit">
+				   	 <li class="icon-check icon-white"></li>保存</button>
+				  </div> 
+				 
+			  </div>
+	      </div>
+      </form>
+      
+      
+      <div class="span4" style="text-align:center;">
+      <div class="row-fluid">
+		   <div id="CancelSub" class="span4"  style="margin-top: 10px;margin-bottom: 8px;">
+		   	 <button class="btn btn-warning" type="button">
+		   	  <li class="icon-remove icon-white"></li>取消</button>
+		   </div>
+	     </div>
+      </div>
+       
+    </div>
+  </div>
+ 
+ 
+ 
+ 
+ <script type="text/javascript">
+
+
+     /*5.2 触发事件 提交模态框新增数据*/
+     $(document).ready(function (){
+         $("#PassengerSub").click(function () {
+             var data = $('#passengerFrm').serializeJSON();
+             /*5.3接口 */
+             $.ajax({
+                 type: "POST",
+                 url: "/passenger/add",
+                 contentType: "application/json; charset=utf-8",
+                 cache: false,  //禁用缓存
+                 data: JSON.stringify(data),  //传入组装的参数
+                 dataType: "json",
+                 success: function (result) {
+
+                     // alert(result)
+
+                     if(result.code != "200"){
+                         alert(result.msg);
+                         parent.document.getElementById('Mainid').src='/static/html/passenger/list.html';
+                     }else {
+                         alert("恭喜你,操作成功!");
+                         // window.location.href = "/static/html/main/main.html";
+                         /*5.6联调 操作成功把模态框关闭*/
+                         // $("#myModal").modal("hide");
+                         parent.document.getElementById("Mainid").src='/static/html/passenger/list.html';
+                         /*页面刷新*/
+                         /*var table = $('#example1').DataTable();
+                         table.ajax.reload(null, false );*/
+                     }
+                 },
+                 error:function(){
+                     parent.document.getElementById('Mainid').src='/static/html/passenger/list.html';
+                 }
+             });
+
+         })
+
+     });
+
+/*    function verify(){
+	    if(document.getElementById("nameId").value==""){
+	       alert("姓名  是必填项，不能为空哦！");
+	       document.getElementById("nameId").focus();
+	       return false;
+	    }else if(document.getElementById("papersNumberId").value==""){
+	       alert("证件号码  是必填项，不能为空哦！");
+	       document.getElementById("papersNumberId").focus();
+	       return false;
+	    }else if(document.getElementById("nameId").value.length>10){
+	     alert("你输入的   姓名  太过长了  请不要超出  10  位长度");
+	     document.getElementById("nameId").focus();
+	     return false;
+        }else if(document.getElementById("birthDateId").value.length>10){
+	     alert("你输入的   出生日期  太过长了  请不要超出  10  位长度：例如（2000-01-01）");
+	     document.getElementById("birthDateId").focus();
+	     return false;
+        }else if(document.getElementById("JGID").value.length>25){
+	     alert("你输入的   发证机关  太过长了  请不要超出  25  位长度");
+	     document.getElementById("JGID").focus();
+	     return false;
+        }else if(document.getElementById("unitsOrAddressId").value.length>25){
+	     alert("你输入的   单位或住址  太过长了  请不要超出  25  位长度");
+	     document.getElementById("unitsOrAddressId").focus();
+	     return false;
+        }else if(document.getElementById("papersValidityId").value.length>25){
+	     alert("你输入的   证件有效期  太过长了  请不要超出  25  位长度");
+	     document.getElementById("papersValidityId").focus();
+	     return false;
+        }else if(document.getElementById("professionId").value.length>10){
+	     alert("你输入的   职业  太过长了  请不要超出  10  位长度");
+	     document.getElementById("professionId").focus();
+	     return false;
+        }else if(document.getElementById("whereAreFromId").value.length>50){
+	     alert("你输入的   从何处来  太过长了  请不要超出  50 位长度");
+	     document.getElementById("whereAreFromId").focus();
+	     return false;
+        }else if(document.getElementById("whereToGoId").value.length>50){
+	     alert("你输入的   到哪里去  太过长了  请不要超出  50 位长度");
+	     document.getElementById("whereToGoId").focus();
+	     return false;
+        }else if(document.getElementById("remarks").value.length>50){
+	     alert("你输入的   备注  太过长了  请不要超出  50 位长度");
+	     document.getElementById("remarks").focus();
+	     return false;
+        }else{
+	       return true;
+	    }
+   }
+   
+    function deletefunction(){
+     parent.document.getElementById('Mainid').src='/static/Passenger/tolist.do';
+   }
+   
+   function onchangeOne(){
+     //姓名
+     if(document.getElementById("nameId").value!=""){
+       document.getElementById("divOne").style.display="none";
+     }else{
+       document.getElementById("divOne").style.display="block"; //显示
+     }
+     //证件号码
+     if(document.getElementById("papersNumberId").value!=""){
+       document.getElementById("divTwo").style.display="none";
+       if(document.getElementById("papersId").value==37){
+	       if(!document.getElementById("papersNumberId").value.trim().match(
+	       "^[1-9][0-9]{5}(([1][9][0-9][0-9])|([2][0](([0][0-9])|([1][0-7]))))"+
+       "(([0][1-9])|([1][0,1,2]))(([0][1-9])|([1|2][0-9])|([3][0|1]))+[0-9]{3}([0-9]|[X]|[x])$"))
+	       {
+	          document.getElementById("papersNumberId").focus();
+	          document.getElementById("papersNumberId").value="";
+	          document.getElementById("divTwo").style.display="block"; //显示
+	          alert("你输入的身份证号码有误，请重新输入！");
+	       }
+       }
+     }else{
+       document.getElementById("divTwo").style.display="block"; //显示
+     }
+     //联系电话 
+     if(document.getElementById("contactPhoneNumberId").value!=""){
+        if(!document.getElementById("contactPhoneNumberId").value.trim().match("^[1][0-9]{10}$"))
+	       {
+	          document.getElementById("contactPhoneNumberId").focus();
+	          document.getElementById("contactPhoneNumberId").value="";
+	          alert("你输入的手机号码有误，请重新输入！");
+	       }
+     }
+   }
+   
+   
+   function YZ(value){
+   console.log(11);
+     if(value!=""){
+       $.ajax({                                                      
+          cache:false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
+          type: "POST",                                           //上面3行都是必须要的
+          url: '/static/Passenger/YZ.do',       //地址 type 带参数
+          data:"papersNumber="+value,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+          async:false,                                          // 是否 异步 提交
+          success: function (result) {                          // 不出现异常 进行立面方
+              if(result>=1){                                  
+                   alert("此身份证已登记过了！");                     //提示框
+                   document.getElementById("papersNumberId").value="";     //这个id的文本框的值 将会清空
+                   document.getElementById("papersNumberId").focus();      // 给这个id的文本框提供焦点
+                   document.getElementById("divTwo").style.display="block"; //显示
+              }else{
+              var N=document.getElementById("papersNumberId").value.substring(6,10);
+	          var Y=document.getElementById("papersNumberId").value.substring(10,12);
+	          var D=document.getElementById("papersNumberId").value.substring(12,14);
+	          document.getElementById("birthDateId").value=N+"-"+Y+"-"+D;
+           }
+          },
+          error: function(data) {  }
+      });
+     }
+   }*/
+ </script>
+   
+
+  </body>
+</html>

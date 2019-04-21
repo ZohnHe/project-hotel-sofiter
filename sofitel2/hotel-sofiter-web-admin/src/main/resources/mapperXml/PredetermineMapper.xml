@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hotel.sofiter.dao.PredetermineMapper">
+
+    <resultMap id="UnBaseResultMap" type="com.hotel.sofiter.pojo.PredeterminePojo">
+        <constructor>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="roomID" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="predetermineTargetID" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="passengerID" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="payWayID" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="predetermineStateID" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="arriveTime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+            <arg column="deposit" jdbcType="DOUBLE" javaType="java.lang.Double"/>
+            <arg column="predetermineDay" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="remind" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        </constructor>
+    </resultMap>
+
+    <select id="selectAll" resultType="com.hotel.sofiter.pojo.PredeterminePojo">
+
+     SELECT p.*,r.roomNumber,
+     ar.attributeDetailsName AS roomGuestRoomLevelName,
+	rt.teamName AS receiveTeamName,
+	passenger.name AS passengerName,
+	rt.principal AS receivePrincipal,
+	b.attributeDetailsName AS receiveTargeTypeName,
+	ap.attributeDetailsName AS predetermineStateName,
+	rt.contactPhoneNUmber AS receiveContactPhoneNUmber,
+	passenger.contactPhoneNumber AS passengerContactPhoneNumber
+	FROM predetermine p
+	LEFT OUTER JOIN room r ON p.roomID=r.id
+	LEFT OUTER JOIN attributedetails ar ON r.guestRoomLevelID=ar.id
+	LEFT OUTER JOIN receivetarget rt ON p.predetermineTargetID=rt.id
+	LEFT OUTER JOIN passenger ON p.passengerID=passenger.id
+	LEFT OUTER JOIN attributedetails ap ON p.predetermineStateID=ap.id
+	LEFT OUTER JOIN attributedetails b ON rt.targetTypeID=b.id
+  </select>
+
+    <update id="updateRemind" parameterType="java.lang.Integer">
+    UPDATE predetermine SET remind=1
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="pageSelect" resultType="com.hotel.sofiter.pojo.PredeterminePojo">
+     SELECT p.* ,
+     r.roomNumber ,
+     ar.attributeDetailsName AS roomGuestRoomLevelName,
+	rt.teamName AS receiveTeamName,passenger.name AS passengerName,
+	rt.principal AS receivePrincipal,b.attributeDetailsName AS receiveTargeTypeName,
+	ap.attributeDetailsName AS predetermineStateName,
+	rt.contactPhoneNUmber AS receiveContactPhoneNUmber,
+	passenger.contactPhoneNumber AS passengerContactPhoneNumber
+	FROM predetermine p LEFT OUTER JOIN room r ON p.roomID=r.id
+	LEFT OUTER JOIN attributedetails ar ON r.guestRoomLevelID=ar.id
+	LEFT OUTER JOIN receivetarget rt ON p.predetermineTargetID=rt.id
+	LEFT OUTER JOIN passenger ON p.passengerID=passenger.id
+	LEFT OUTER JOIN attributedetails ap ON p.predetermineStateID=ap.id
+	LEFT OUTER JOIN attributedetails b ON rt.targetTypeID=b.id
+
+	WHERE (rt.teamName LIKE CONCAT('%',#{receiveTeamName,jdbcType=VARCHAR},'%')
+	OR passenger.name LIKE CONCAT('%',#{passengerName,jdbcType=VARCHAR},'%'))
+	AND p.predetermineStateID=#{predetermineStateID,jdbcType=INTEGER}
+
+  </select>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+    DELETE FROM predetermine WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <!--   根据 团队id 来查询 -->
+    <select id="findTeamId" resultType="com.hotel.sofiter.pojo.PredeterminePojo">
+
+    SELECT p.*,r.roomNumber,ar.attributeDetailsName AS roomGuestRoomLevelName,
+	rt.teamName AS receiveTeamName,passenger.name AS passengerName,
+	rt.principal AS receivePrincipal,b.attributeDetailsName AS receiveTargeTypeName,
+	ap.attributeDetailsName AS predetermineStateName,
+	rt.contactPhoneNUmber AS receiveContactPhoneNUmber,
+	passenger.contactPhoneNumber AS passengerContactPhoneNumber
+
+	FROM predetermine p LEFT OUTER JOIN room r ON p.roomID = r.id
+	LEFT OUTER JOIN attributedetails ar ON r.guestRoomLevelID=ar.id
+	LEFT OUTER JOIN receivetarget rt ON p.predetermineTargetID=rt.id
+	LEFT OUTER JOIN passenger ON p.passengerID=passenger.id
+	LEFT OUTER JOIN attributedetails ap ON p.predetermineStateID=ap.id
+	LEFT OUTER JOIN attributedetails b ON rt.targetTypeID=b.id
+    WHERE p.predetermineTargetID=#{predetermineTargetID,jdbcType=INTEGER} AND p.predetermineStateID=66
+  </select>
+
+
+	<!--   id查询-->
+	<select id="findById" resultType="com.hotel.sofiter.pojo.PredeterminePojo">
+    SELECT * FROM predetermine WHERE id=#{id,jdbcType=INTEGER}
+   </select>
+
+    <!--   根据 旅客id 来查询 -->
+    <select id="findLvKeId" resultType="com.hotel.sofiter.pojo.PredeterminePojo">
+     SELECT p.*,r.roomNumber,ar.attributeDetailsName AS roomGuestRoomLevelName,
+	rt.teamName AS receiveTeamName,passenger.name AS passengerName,
+	rt.principal AS receivePrincipal,b.attributeDetailsName AS receiveTargeTypeName,
+	ap.attributeDetailsName AS predetermineStateName,
+	rt.contactPhoneNUmber AS receiveContactPhoneNUmber,
+	passenger.contactPhoneNumber AS passengerContactPhoneNumber
+	FROM predetermine p LEFT OUTER JOIN room r ON p.roomID=r.id
+	LEFT OUTER JOIN attributedetails ar ON r.guestRoomLevelID=ar.id
+	LEFT OUTER JOIN receivetarget rt ON p.predetermineTargetID=rt.id
+	LEFT OUTER JOIN passenger ON p.passengerID=passenger.id
+	LEFT OUTER JOIN attributedetails ap ON p.predetermineStateID=ap.id
+	LEFT OUTER JOIN attributedetails b ON rt.targetTypeID=b.id
+    WHERE p.passengerID=#{passengerID,jdbcType=INTEGER} AND p.predetermineStateID=66
+  </select>
+
+	<!--   新增 -->
+	<insert id="insertAll" useGeneratedKeys="true" keyProperty="id" parameterType="com.hotel.sofiter.pojo.PredeterminePojo" >
+       INSERT INTO predetermine (roomID,predetermineTargetID,passengerID,payWayID,
+     predetermineStateID,arriveTime,deposit,predetermineDay)
+     values (#{roomID,jdbcType=INTEGER},
+             #{predetermineTargetID,jdbcType=INTEGER},
+             #{passengerID,jdbcType=INTEGER},
+             #{payWayID,jdbcType=INTEGER},
+             #{predetermineStateID,jdbcType=INTEGER},
+             #{arriveTime,jdbcType=TIMESTAMP},
+             #{deposit,jdbcType=DOUBLE},
+             #{predetermineDay,jdbcType=VARCHAR})
+  </insert>
+
+</mapper>

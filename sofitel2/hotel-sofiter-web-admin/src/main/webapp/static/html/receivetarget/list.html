@@ -1,0 +1,594 @@
+
+<!--<c:set  value="${pageContext.request.contextPath}" scope="page" var="ctx"></c:set>-->
+<!--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">-->
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<html>
+  <head>
+
+      <title></title>
+
+      <!--jquery DataTables插件自定义分页ajax实现-->
+      <link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen">
+      <link href="http://cdn.bootcss.com/datatables/1.10.11/css/dataTables.bootstrap.min.css" rel="stylesheet" media="screen">
+      <link href="http://cdn.bootcss.com/datatables/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" media="screen">
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	
+<!--   <link rel="stylesheet" href="/static/css/roomset/roomset.css" type="text/css"></link> -->
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css" type="text/css">
+  <link rel="stylesheet" href="/static/css/page.css" type="text/css">
+  <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">  <!-- start 响应式布局要添加的 -->
+      <link href="http://cdn.bootcss.com/datatables/1.10.11/css/dataTables.bootstrap.min.css" rel="stylesheet"
+            media="screen">
+  <!-- dataTables -->
+  <link href="http://cdn.bootcss.com/datatables/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" media="screen">
+
+  <script src="/static/bootstrap/js/jquery-3.1.1.min.js"></script>
+  <script src="/static/bootstrap/js/bootstrap.js"></script>
+  <script type="text/javascript" src="/static/js/page.js"></script>
+   <style>
+   
+   .container{
+     margin-top: 10px;
+   }
+   
+    .labelroomnumber{
+      position: relative;
+      font-size: 17px;
+      float: left;
+      margin-top: 15px;
+    }
+    
+    .textone{
+    margin-top:12px;
+    }
+    
+    .rightOne{
+    margin-right: 50px;
+    font-size:16px;
+    }
+    
+    .table th,.table td{
+       text-align: center; 
+    }
+    
+    .theadone{
+     background-color: #CCFF99;
+    }
+    
+    .dgvone{
+      margin-top: 12px;
+    }
+    
+    .roomnumberwidth{
+      width:70%;
+    }
+    
+  
+  </style>
+  
+ </head>
+  
+ 
+  <body>
+  <div class="container" >
+    <div class="span5">
+	    <div class="row-fluid">
+		    <label class="labelroomnumber">团队名称：</label>
+		    <!--<form action="/static/ReceiveTarget/tolist.do" method="post" style="float: left;">-->
+
+            <!--form中的事件提交得注释掉，不然随便搞一个键盘输入都可能会提交-->
+            <!--<form action="#" method="post" style="float: left;">-->
+            <!--修改搜索-->
+		    <!--<form>
+			   <input id="txtnameid" name="txtname" class="textone roomnumberwidth" style="border-radius:0px; border-top-left-radius:4px; border-bottom-left-radius:4px;height:26px;" type="text" placeholder="请输入关键字" value="">
+			   <div class="input-append">  
+			      <button type="nameSearchBtn" class="btn-success textone" style="margin-left:-4px;height:26px;"><li class="icon-search icon-white"></li>搜索</button>
+			   </div>
+		    </form>-->
+	    </div>
+    </div>
+    <div class="span6">
+      <div class="row-fluid">
+       <div class="span3">
+           <!--<button class="btn btn-info btn-small textone" type="button" onclick="addfunction()"><li class="icon-plus icon-white"></li>新增</button>-->
+           <a class="btn btn-info btn-small textone" type="button" href="add.html"><li class="icon-plus icon-white"></li>新增</a>
+           <!--<a href="add.html">
+               <span>添加</span>
+           </a>-->
+       </div>
+       <div class="span3">
+         <button class="btn btn-warning btn-small textone" type="button" id="updates"><li class="icon-pencil icon-white"></li>修改</button>
+       </div>
+       <div class="span3">
+         <button class="btn btn-danger btn-small textone" type="button" id="deletes"><li class="icon-remove icon-white"></li>删除</button>
+           <!--<button type="button" class="btn btn-danger btn-small textone" id="submitDelete"><li class="icon-remove icon-white"></li>删除</button>-->
+       </div>
+      </div>
+    </div>
+    <br>
+    <div class="dgvone">
+       <table class="table table-condensed table-bordered table-striped" id="tableid">
+	      <thead class="theadone">
+	        <tr>
+	          <th >选择</th>
+	          <th >对象类别</th>
+	          <th >团队名称</th>
+	          <th >团队编号</th>
+	          <th >负责人</th>
+	          <th >登记时间</th>
+	          <th >联系电话</th>
+	        </tr>
+	      </thead>
+	      <!--<tbody id="tbody">-->
+	        <!--<c:forEach items="${list.result}" var="item">-->
+		        <!--<tr>-->
+		          <!--<td><input type="checkbox" name="id" value="${item.id}"></td>-->
+		          <!--<td>${item.targetTypeName}</td>-->
+		          <!--<td>${item.teamName}</td>-->
+		          <!--<td>${item.teamCode}</td>-->
+		          <!--<td>${item.principal}</td>-->
+		          <!--<td>${item.registerTime}</td>-->
+		          <!--<td>${item.contactPhoneNUmber}</td>-->
+		        <!--</tr>-->
+	        <!--</c:forEach>-->
+	      <!--</tbody>-->
+	    </table>
+    </div>
+
+    <div class="span11">
+      <div class="row-fluid">
+        <div class="tcdPageCode" style="text-align:center;"></div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!--分页插件js-->
+  <!--<script src="http://cdn.bootcss.com/datatables/1.10.11/js/jquery.js"></script>
+  <script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="http://cdn.bootcss.com/datatables/1.10.11/js/jquery.dataTables.min.js"></script>
+  <script src="http://cdn.bootcss.com/datatables/1.10.11/js/dataTables.bootstrap.min.js"></script>-->
+
+  <script src="/static/js/jquery.dataTables.min.js"></script>
+  <script src="/static/js/dataTables.bootstrap.min.js"></script>
+
+  <script type="text/javascript">
+
+
+
+      $(function () {
+          //提示信息
+          var lang = {
+              "sProcessing": "处理中...",
+              "sLengthMenu": "每页 _MENU_ 项",
+              "sZeroRecords": "没有匹配结果",
+              "sInfo": "当前显示第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
+              "sInfoEmpty": "当前显示第 0 至 0 项，共 0 项",
+              "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+              "sInfoPostFix": "",
+              "sSearch": "搜索:",
+              "sUrl": "",
+              "sEmptyTable": "表中数据为空",
+              "sLoadingRecords": "载入中...",
+              "sInfoThousands": ",",
+              "oPaginate": {
+                  "sFirst": "首页",
+                  "sPrevious": "上页",
+                  "sNext": "下页",
+                  "sLast": "末页",
+                  "sJump": "跳转"
+              },
+              "oAria": {
+                  "sSortAscending": ": 以升序排列此列",
+                  "sSortDescending": ": 以降序排列此列"
+              }
+          };
+
+          /*//初始化表格
+          var table = $("#tableid").dataTable({
+              dom: 'Bfrtip',
+              buttons: [
+                  {
+                      text: '删除11',
+                      action: function ( e, dt, node, config ) {
+                          //dt.ajax.reload();
+                          var arr = new Array();
+                          $("input:checkbox[name=receivesId]:checked").each(function (key, value) {
+                              arr[key] = $(value).val();
+                          });
+                          //alert("所有选中的商品ID:"+arr.join(","));
+                          if(arr.length == 0){
+                              alert("请选择需要删除的接待对象!");
+                          }else{
+                              /!* 封装请求参数 *!/
+                              var param = {};
+                              param.receiveId = arr;
+
+                              $.ajax({
+                                  type: "POST",
+                                  url: "/receive/delete",
+                                  contentType: "application/json; charset=utf-8",
+                                  cache: false,  //禁用缓存
+                                  data: JSON.stringify(param),  //传入组装的参数
+                                  dataType: "json",
+                                  success: function (result) {
+                                      /!*if(result.code != "200"){
+                                          alert(result.msg);
+                                      }else {*!/
+                                          alert("删除成功!");
+                                          dt.ajax.reload(null,false);
+                                      /!*}*!/
+                                  }
+                              });
+                          }
+
+                      }
+                  },
+                  {
+                      text: '新增',
+                      action: function ( e, dt, node, config ) {
+                          //dt.ajax.reload();
+                          $("#goodsFrm")[0].reset();
+                          $("#myModalLabel").text("添加商品");
+                          $("#goodsIdx").val("");
+                          $("#myModal").modal("show");
+                      }
+                  },
+              ],
+              language:lang,  //提示信息
+              autoWidth: false,  //禁用自动调整列宽
+              stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
+              processing: true,  //隐藏加载提示,自行处理
+              serverSide: true,  //启用服务器端分页
+              searching: false,  //禁用原生搜索
+              orderMulti: false,  //启用多列排序
+              order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
+              renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
+              pagingType: "simple_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
+              //渲染
+              columnDefs: [             {
+                  "render": function ( data, type, row ) {
+                      return "<input type='checkbox' name='receivesId' value='" + data + "'>";
+                  },
+                  "targets": 0 //指定渲染列：第一列(渲染第一列为单选框，data自动匹配为  {"data":"id"}中数据）
+              }/!*,
+                  {
+                      "render": function ( data, type, row , meta) {
+                          return "<button type=\"button\" class=\"btn btn-block btn-default\" onclick='goodsModify("+meta.row+")'>修改</button>";
+                      },
+                      "targets": 6 //指定渲染列：第一列(渲染第一列为单选框，data自动匹配为  {"data":"id"}中数据）
+                  }*!/
+                  ,{
+                      "targets": 'nosort',  //列的样式名
+                      "orderable": false    //包含上样式名‘nosort’的禁止排序
+                  }],
+              ajax: function (data, callback, settings) {
+                  //封装请求参数
+                  var param = {};
+                  param.pageSize = data.length; //页面显示记录条数，在页面显示每页显示多少项的时候
+                  param.start = data.start;    //开始的记录序号
+                  param.pageNum = (data.start / data.length)+1;//当前页码
+
+                  /!*!//商品搜索
+                  if(data.search.value != "") {
+                      param.search = data.search.value;
+                  }
+                  //数据排序
+                  if(data.order.length > 0){
+                      param.order = data.order[0].column;
+                      param.dir = data.order[0].dir;
+                  }
+                  //console.log(param);
+                  //ajax请求数据*!/
+                  $.ajax({
+                      type: "POST",
+                      url: "/receive/list",
+                      contentType: "application/json; charset=utf-8",
+                      cache: false,  //禁用缓存
+                      data: JSON.stringify(param),  //传入组装的参数
+                      dataType: "json",
+                      success: function (result) {
+                          /!*if(result.code != "200"){
+                              alert(result.msg);
+                          }else {*!/
+                              //console.log(result);
+                              //setTimeout仅为测试延迟效果
+                              setTimeout(function () {
+                                  //封装返回数据
+                                  var returnData = {};
+                                  returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                                  returnData.recordsTotal = result.totalRecord;//返回数据全部记录
+                                  returnData.recordsFiltered = result.totalRecord;//后台不实现过滤功能，每次查询均视作全部结果
+                                  if (result.totalRecord == 0) {  //解决空数据时卡顿
+                                      returnData.data = "";    //返回的数据列表
+                                  } else {
+                                      returnData.data = result.result;    //返回的数据列表
+                                  }
+                                  //console.log(returnData);
+                                  //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+                                  //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                                  callback(returnData);
+                              }, 200);
+                          /!*}*!/
+                      }
+                  });
+              },
+              //列表表头字段
+              columns: [
+                  { "data": "id" },
+                  { "data": "targetTypeID" },
+                  { "data": "principal" },
+                  { "data": "teamName" },
+                  { "data": "teamCode" },
+                  { "data": "registerTime" },
+                  { "data": "contactPhoneNUmber" },
+              ]
+          }).api();
+          //此处需调用api()方法,否则返回的是JQuery对象而不是DataTables的API对象*/
+
+
+
+          //初始化表格
+          var table = $("#tableid").dataTable({
+              dom: 'Bfrtip',//每页显示可调显示数据数量
+              language:lang,  //提示信息
+              autoWidth: false,  //禁用自动调整列宽
+              stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
+              processing: true,  //隐藏加载提示,自行处理
+              serverSide: true,  //启用服务器端分页
+              searching: false,  //禁用原生搜索
+              orderMulti: false,  //启用多列排序
+              order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
+              renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
+              pagingType: "simple_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
+              //渲染
+              columnDefs: [             {
+                  "render": function ( data, type, row ) {
+                      /*删除1.1*/
+                      return "<input type='checkbox' name='receivesId'  value='" + data + "'>";
+                  },
+                  "targets": 0 //指定渲染列：第一列(渲染第一列为单选框，data自动匹配为  {"data":"id"}中数据）
+              },
+                  /*{
+                      "render": function ( data, type, row , meta) {
+                          return "<button type=\"button\" class=\"btn btn-block btn-default\" onclick='goodsModify("+meta.row+")'>修改</button>";
+                      },
+                      "targets": 6 //指定渲染列：第一列(渲染第一列为单选框，data自动匹配为  {"data":"id"}中数据）
+                  }
+              ,*/{
+                  "targets": 'nosort',  //列的样式名
+                  "orderable": false    //包含上样式名‘nosort’的禁止排序
+              }],
+              ajax: function (data, callback, settings) {
+                  //封装请求参数
+                  var param = {};
+                  /*踩坑 记得与后端接口接收类型名称对应*/
+                  param.pageSize = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+                  /*param.start = data.start;//开始的记录序号*/
+                  param.pageNum = (data.start / data.length)+1;//当前页码
+                  //console.log(param);
+
+                  //商品搜索
+                  var searchstr = $("#txtnameid").val();
+                  if(searchstr != "") {
+                      param.search = searchstr;
+                  }
+                  //数据排序 踩坑 要排序就得加
+                  if(data.order.length > 0){
+                      param.order = data.order[0].column;
+                      param.dir = data.order[0].dir;
+                  }
+
+                  //ajax请求数据
+                  $.ajax({
+                      type: "POST",
+                      url: "/receive/list",
+                      contentType: "application/json; charset=utf-8",
+                      cache: false,  //禁用缓存
+                      data: JSON.stringify(param),   //修改提交数据注意
+                      dataType: "json",
+
+                      success: function (result) {
+                          //console.log(result);
+                          //setTimeout仅为测试延迟效果
+                          setTimeout(function () {
+                              //封装返回数据
+                              var returnData = {};
+                              returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                              returnData.recordsTotal = result.totalRecord;//返回数据全部记录 ——踩坑 修改2 result.totalRecord要与前端返回的数据格式对应
+                              returnData.recordsFiltered = result.totalRecord;//后台不实现过滤功能，每次查询均视作全部结果——踩坑 修改2
+
+                              if (result.totalRecord == 0) {
+                                  //4.7.4解决空数据时卡顿,就是查不到数据是一直在搜索中
+                                  returnData.data = "";    //返回的数据列表
+                              } else {
+                                  returnData.data = result.result;    //返回的数据列表
+                              }
+
+                              //console.log(returnData);
+                              //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+                              //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                              callback(returnData);
+                          }, 200);
+                      }
+                  });
+              },
+              //列表表头字段
+              /*
+              * <th >选择</th>
+                <th >接待对象类别</th>Integer targetTypeID;
+                <th >负责人</th> String principal;
+                <th >团队名称</th>String teamName;
+                <th >团队编号</th>String teamCode;
+                <th >接待时间</th>Timestamp registerTime;
+                <th >练习电话</th>String contactPhoneNUmber;
+              * */
+              /*columns: [
+                  { "data": "id" },
+                  { "data": "targetTypeID" },
+                  { "data": "principal" },
+                  { "data": "teamName" },
+                  { "data": "teamCode" },
+                  { "data": "registerTime" },
+                  { "data": "contactPhoneNUmber" }
+              ]*/
+              columns: [
+                  { "data": "id" },
+                  { "data": "targetTypeID" },
+                  { "data": "teamName" },
+                  { "data": "teamCode" },
+                  { "data": "principal" },
+                  { "data": "time" },
+                  { "data": "contactPhoneNUmber" }
+              ]
+          }).api();
+          //此处需调用api()方法,否则返回的是JQuery对象而不是DataTables的API对象
+      });
+
+      /*踩坑，非原生搜索*/
+      $(document).ready(function() {
+          var table = $('#tableid').DataTable();
+          // Event listener to the two range filtering inputs to redraw on input
+          $('#nameSearchBtn').click( function() {
+              table.draw();
+          } );
+
+      } );
+
+        $(function () {
+            $("#deletes").click(function () {
+                var arr = new Array();
+                $("input:checkbox[name=receivesId]:checked").each(function (key, value) {
+                    arr[key] = $(value).val();
+                });
+                //alert("所有选中的商品ID:"+arr.join(","));
+                if(arr.length == 0){
+                    alert("请选择需要删除的接待对象!");
+                }else{
+                    /* 封装请求参数 */
+                    var param = {};
+                    param.receiveId = arr;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/receive/delete",
+                        contentType: "application/json; charset=utf-8",
+                        cache: false,  //禁用缓存
+                        data: JSON.stringify(param),  //传入组装的参数
+                        dataType: "json",
+                        success: function (result) {
+                            if(result.result ==0){
+                                alert(result.msg);
+                            }else {
+                                alert("删除成功!");
+                                var table=$("#tableid").DataTable();
+                                table.ajax.reload(null,false);
+                            }
+                        }
+                    });
+                }
+            })
+        });
+
+        $(function () {
+            $("#updates").click(function () {
+                var arr = new Array();
+                $("input:checkbox[name=receivesId]:checked").each(function (key, value) {
+                    arr[key] = $(value).val();
+                });
+                //alert("所有选中的商品ID:"+arr.join(","));
+                if(arr.length == 0){
+                    alert("请选择需要修改的接待对象!");
+                }else if (arr.length > 1){
+                    alert("只能选择一条数据!")
+                } else{
+                    /* 封装请求参数 */
+                    var param = {};
+                    var updateId0 = param.id = arr[0];
+                    // window.location.href = "update.html";
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/receive/updateMiddle",
+                        cache: false,  //禁用缓存
+                        async: false,
+                        data: "updateId0=" + escape(updateId0),
+                        success: function (data) {
+                            window.location.href = "update.html";
+                        }
+                    });
+
+                }
+            })
+        });
+
+
+   function addfunction(){
+     // parent.document.getElementById('Mainid').src='/static/ReceiveTarget/toadd.do';
+     parent.document.getElementById('Mainid').src='static/html/receivetarget/add.html?id=' + "";
+   }
+   
+   function updatefunction(){
+   var chk_value=[];
+  	$('input[name="id"]:checked').each(function(){
+  		chk_value.push($(this).val());
+  	});
+  	if(chk_value!=""){
+		if(chk_value.toString().indexOf(",")>0){
+		   alert("修改只能选择一条");
+		}else{
+		   // parent.document.getElementById("Mainid").src='/static/ReceiveTarget/toupdate.do?id='+chk_value;
+		   parent.document.getElementById("Mainid").src='static/html/receivetarget/update.html?id='+chk_value;
+		}
+	}else{
+	  alert("请选择一条数据进行修改");
+	}
+  }
+  
+   function deletefunction(){
+    var chk_value = [];
+  	$('input[name="id"]:checked').each(function(){
+  		chk_value.push($(this).val());
+  	});
+  	if(chk_value != ""){
+  	var flag=window.confirm("注意：您确定要永久删除该信息吗?");
+     if(flag){
+  	  // parent.document.getElementById("Mainid").src='/static/ReceiveTarget/delete.do?id='+chk_value;
+  	  parent.document.getElementById("Mainid").src='/static/html/receivetarget/list.html?id='+chk_value;
+  	}
+  	}else{
+	  alert("请选择一条或多条数据进行删除");
+	}
+	
+  }
+  
+  
+  
+  
+   
+  /*
+   
+  /!* 分页要用的 *!/
+  $(".tcdPageCode").createPage({
+     pageCount:${list.totalPage},
+     current:${list.currentPage},
+     backFn:function(p){
+     var txtname=document.getElementById("txtnameid").value;
+     location.href="/static/ReceiveTarget/tolist.do?currentPage="+p+"&txtname="+txtname;
+     }
+   });*/
+  
+ </script>
+   
+  </body>
+</html>

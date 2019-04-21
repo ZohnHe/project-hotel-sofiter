@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--<mapper namespace="com.hotel.sofiter.dao.mapping.TbReceiveTargetMapper" >-->
+<mapper namespace="com.hotel.sofiter.dao.ReceiveDao" >
+  <resultMap id="BaseResultMap" type="com.hotel.sofiter.pojo.TbReceiveTarget" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="targetTypeID" property="targettypeid" jdbcType="INTEGER" />
+    <result column="principal" property="principal" jdbcType="VARCHAR" />
+    <result column="teamName" property="teamname" jdbcType="VARCHAR" />
+    <result column="teamCode" property="teamcode" jdbcType="VARCHAR" />
+    <result column="registerTime" property="registertime" jdbcType="TIMESTAMP" />
+    <result column="contactPhoneNUmber" property="contactphonenumber" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, targetTypeID, principal, teamName, teamCode, registerTime, contactPhoneNUmber
+  </sql>
+</mapper>

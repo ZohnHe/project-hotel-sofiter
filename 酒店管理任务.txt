@@ -1,0 +1,247 @@
+酒店管理系统
+旅客管理-旅客信息
+1 后端发给前端信息
+	前端显示：
+	姓名
+	性别
+	出生日期
+	民族
+	旅客级别
+	证件类型
+	证件号码
+	联系电话
+	
+	SELECT p.*,a.attributeDetailsName AS papersName,b.attributeDetailsName AS educationDegreeName,
+     c.attributeDetailsName AS genderName,d.attributeDetailsName AS passengerLevelName,
+     e.attributeDetailsName AS nationName,f.attributeDetailsName AS thingReasonName
+     FROM passenger p INNER JOIN attributedetails a ON p.papersID=a.id 
+     INNER JOIN attributedetails b ON p.educationDegreeID=b.id  INNER JOIN attributedetails c ON p.genderID=c.id 
+     INNER JOIN attributedetails d ON p.passengerLevelID=d.id INNER JOIN attributedetails e ON p.nationID=e.id
+     INNER JOIN attributedetails f ON p.thingReasonID=f.id 
+     
+	 数据库实体
+	private Integer id;
+	
+	private Integer papersID;              //证件ID
+	
+	private Integer educationDegreeID;     //文化程度ID
+	
+	private Integer genderID;              //性别ID
+	
+	private Integer passengerLevelID;      //旅客级别ID
+	
+	private Integer nationID;              //民族ID
+	
+	private Integer thingReasonID;         //事由
+
+	private String name;                   //姓名
+	
+	private String papersNumber;           //证件号码
+	
+	private String birthDate;              //出生日期
+	
+	private String licenceIssuingAuthorty; //发证机关
+	
+	private String unitsOrAddress;         //单位或住址
+	
+	private String papersValidity;         //证件有效期
+	
+	private String profession;             //职业
+	
+	private String whereAreFrom;           //从何处来
+	
+	private String whereToGo;              //到哪里去
+	
+	private String contactPhoneNumber;     //联系电话
+	
+	private String remarks;                //备注
+	
+	
+	//扩展字段
+	
+	private String papersName;             //证件名称
+	
+	private String educationDegreeName;    //文化程度名称
+	
+	private String genderName;             //姓别
+	
+	private String passengerLevelName;     //旅客级别名称
+	
+	private String nationName;             //民族名称
+	
+	private String thingReasonName;        //民族名称
+	
+	
+	//额外传参数需要
+	private Integer lvKeID;        //旅客id
+	
+	private Integer stayRegisterID;        //住宿登记id
+	
+	踩坑1：
+	接口输入实体类不哟啊写构造函数，否则会报400，请求接受错误
+	
+	1接口Passenger
+		输入输出实体 
+		输入 PassengerEntity
+		输出 PassengerResp
+		导入单元测试pom
+		<!--单元测试-->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+			
+	2service 
+		采用mybatis分页插件——已有
+		
+		    <context:annotation-config />
+		springcontext.xml加入service注解——已有
+		<context:component-scan base-package="com.suoron.myshop.service.impl"/>
+	
+	3dao
+
+	测试类
+	踩坑2：
+	注解@ContextConfiguration(locations = "classpath:springContext.xml")中注意通配符问题
+	//@ContextConfiguration(locations = "classpath:springContext*.xml")
+	// 这个*通配符会导致Error creating bean with name 'com.hotel.sofiter.dao.mapping.TbPassengerMapperTest': Injection of resource dependencies failed; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type [com.hotel.sofiter.dao.mapping.TbPassengerMapper] found for dependency: expected at least 1 bean which qualifies as autowire candidate for this dependency. Dependency annotations: {@javax.annotation.Resource(shareable=true, lookup=, name=, description=, authenticationType=CONTAINER, type=class java.lang.Object, mappedName=)}
+	//	at org.springframework.context.annotation.CommonAnnotationBeanPostProcessor.postProcessPropertyValues(CommonAnnotationBeanPostProcessor.java:311)
+
+	踩坑3：
+	用了mybatis分页插件就不要再sql语句再limit #{start},#{pageSize} ，否则出现空指针异常
+	
+	踩坑4：
+	错误信息前三个###，一般是sql问题，先看看语句问题，再看看mysql有没有打开
+		
+		踩坑5
+		前端ajax记得要加
+		data: JSON.stringify(data),   //修改提交数据注意
+		
+	前端交互
+	1 将jsp后缀html
+	2 将css的路径改为实际路径
+	3 把java代码删掉
+	4 有列表的动态展示，用datatable插件，表格id对应新表格
+		改渲染——param 记得与后端接口接收类型名称对应——returnData.recordsTotal = result.totalRecord;result.totalRecord要与前端返回的数据格式对应
+	5 前端ajax记得要加
+		data: JSON.stringify(data),   //修改提交数据注意，这样返回的数据才是json
+	6 增加排序
+		 前端：datatable加
+			//数据排序 踩坑6 要排序就得加
+                  if(data.order.length > 0){
+                      param.order = data.order[0].column;
+                      param.dir = data.order[0].dir;
+                  }
+				才有返回的order,dir
+		后端，dao sql语句加
+				   <if test="orderStr != null and orderStr.length() > 0">
+						${orderStr}
+					</if>
+			实体类，service,contraller修改
+			
+	7 搜索
+		<!-- search form -->
+      <form action="#" method="get" class="sidebar-form">
+        <div class="input-group">
+          <input type="text" name="q" class="form-control" placeholder="Search...">
+          <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+        </div>
+      </form>
+      <!-- /.search form -->
+		踩坑7——非原生搜索
+		1）加js
+			$(document).ready(function() {
+				//获取表格对象
+				var table = $('#tableid').DataTable();
+				// Event listener to the two range filtering inputs to redraw on input
+				$('#nameSearchBtn').click( function() {
+					table.draw();
+				} );
+			} );
+		2）ajax加获取搜索框的值
+			//商品搜索
+			踩坑8：不要写成是搜索按钮的id，那个没有值得！
+                  var searchstr = $("#txtnameid").val();
+                  if(searchstr != "") {
+                      param.search = searchstr;
+                  }
+		3）关于js冲突	
+			把datatable所有css,js注释掉，然后加重新加入，目前项目在bootstrap的js和font加入了datatable的包了
+			
+		如果调用原生的搜索框直接在表格初始化searching: false,  //禁用原生搜索
+			把false改为true,就出来了
+			
+		改增加页面	
+			踩坑8：搜索框回车HTTP Status 405 – Method Not Allowed 把前端搜索的form注释掉就好
+		把增加的按钮加id，把原本div里的onclick删掉
+
+		增加的后端接口实现
+			加utils，Hibernate Validator常用注解
+			
+			输出实体
+			
+			ctrl+shift+T 创建测试类
+			@RunWith(SpringJUnit4ClassRunner.class)   //表示整合JUnit4进行测试
+			@ContextConfiguration(locations = "classpath:springContext.xml")  //加载spring配置文件
+			
+			add加这个
+			<!--jqury.cdnserialize 在线资源-->
+			/*用jqury.cdn.serialize获取接口数据，获取修改或新增的表格的数据，要导入jq的包 */
+					var data = $('#goodsFrm').serializeJSON();
+			<script src="https://cdn.bootcss.com/jquery.serializeJSON/2.8.0/jquery.serializejson.min.js"></script>
+			
+			踩坑9：
+			前端增加数据，数据库多表链及注意id要匹配，不然增加了本表而没有另外的表也搞不到展示数据
+			
+			踩坑10：
+			button的id要放在div
+			type="submit"还是要换为button
+			submit是button的一个特例，也是button的一种，它把提交这个动作自动集成了。
+			如果表单在点击提交按钮后需要用JS进行处理（包括输入验证）后再提交的话，通常都必须把submit改成button，
+			即取消其自动提交的行为，否则，将会造成提交两次的效果，对于动态网页来说，也就是对数据库操作两次。或者在使用submit时验证时加return true或false。
+	
+			踩坑11：
+			    /*DELETE FROM passenger WHERE id = #{id,jdbcType=INTEGER}*/
+			注释的语句也不要放到sql中，也会跑的
+			踩坑12：
+			onclick事件不能放在ready中，因为ready也是一个事件
+			踩坑13：
+			js用cookie记得到包js.cookie
+			
+			学会看swagger
+			statement (not found): com.hotel.sofiter.dao.mapping.TbPassengerMapper.passengerModify
+			数据库dao问题！！！
+			
+			踩坑12：
+			/*时间字符串化*/，不然会展示出来是一堆数字，在回复给前端的实体类中加字符化得修改，记得判断是否为空，再转换，不然会导致异常页面无法正常加载
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

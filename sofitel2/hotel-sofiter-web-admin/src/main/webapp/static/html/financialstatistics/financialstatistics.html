@@ -1,0 +1,350 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    
+    <title></title>
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	
+<!--   <link rel="stylesheet" href="/static/css/roomset/roomset.css" type="text/css"></link> -->
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css" type="text/css"></link>
+  <link rel="stylesheet" href="/static/css/page.css" type="text/css"></link>
+  <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">  <!-- start 响应式布局要添加的 -->
+  <script src="/static/bootstrap/js/jquery-3.1.1.min.js"></script>
+  <script src="/static/bootstrap/js/bootstrap.js"></script>
+  <script type="text/javascript" src="/static/My97DatePicker/WdatePicker.js"></script>
+  <script type="text/javascript" src="/static/js/page.js"></script>
+  <script type="text/javascript" src="/static/js/common.js"></script>
+
+	  <!-- DataTables -->
+	  <link rel="stylesheet" href="/static/css/dataTables.bootstrap.min.css">
+	  <!-- dataTables -->
+	  <link href="http://cdn.bootcss.com/datatables/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" media="screen">
+
+	  <script src="/static/bootstrap/js/jquery-3.1.1.min.js"></script>
+	  <script src="/static/bootstrap/js/bootstrap.js"></script>
+	  <script type="text/javascript" src="/static/js/page.js"></script>
+
+   <style>
+   
+   .container{
+     margin-top: 10px;
+     margin-left:0px;
+     margin-right:0px;
+     width:98%;
+     font-size:15px;
+   }
+   .span12{
+     width:98%;
+   }
+   
+    .labelroomnumber{
+      position: relative;
+      font-size: 15px;
+      float: left;
+      margin-top: 15px;
+    }
+    
+    .textone{
+    margin-top:12px;
+    }
+    
+    .rightOne{
+    margin-right: 50px;
+    font-size:15px;
+    }
+    
+    .table th,.table td{
+       text-align: center; 
+    }
+    
+    .theadone{
+     background-color: #CCFF99;
+    }
+    
+    .roomnumberwidth{
+      width:60%;
+    }
+    
+    .heigthone{
+      height:25px;
+    }
+    .widthone{
+     width:100%;
+    }
+    .widthtwo{
+     width:100%;
+    }
+    
+    .XuanXiangKa{
+      .active
+    }
+  
+  </style>
+  
+ 
+ 
+  <body>
+  <div class="container" style="height:630px;overflow-x:auto;">
+    <div class="span12" style="margin-top:10px;">
+       <div class="row-fluid">
+           <div class="span5">
+              <label style="float:left;">结账区段：</label>
+	          <!--最大日期为 id="datemax"的选中值或者当前系统日期-->
+	          <input style="width:25%;height:26px;" type="text" id="datemin" class="input-text Wdate"
+	          onfocus="WdatePicker({maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}'})" value=""> ~
+		      <!--最大日期为当前系统日期，最小日期为id="datemin选中值"-->
+			  <input style="width:25.5%;height:26px;" type="text" id="datemax" class="input-text Wdate"
+			  onfocus="WdatePicker({minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d'})" value="">
+	          <button onclick="timeSelect()" type="button" class="btn-success" style="margin-top:-12px;height:25px;"><li class="icon-search icon-white"></li>查询</button>
+              <button onclick="particulars()" type="button" class="btn-info" style="margin-top:-12px;height:25px;"><li class="icon-zoom-in icon-white"></li>详情</button>
+           </div>
+	          <label style="float:left;">出租房间数：</label>
+              <label style="float:left;margin-right:15px;"></label><!--${chuZuFangJianShu}-->
+              <label style="float:left;">住宿人数：</label>
+              <label style="float:left;margin-right:15px;"></label><!--${zhuSuRenShu}-->
+              <label style="float:left;">消费金额总计：</label>
+              <label style="float:left;margin-right:15px;color:blue;"></label><!--${xiaoFeiJinE}-->
+              <label style="float:left;">结账金额总计：</label>
+              <label style="float:left;color:red;"></label><!--${JieZhangJinE}-->
+       </div>
+    </div>
+    <div class="span12" style="margin-top:10px;">
+    <div class="dgvone">
+       <table class="table table-condensed table-bordered table-striped" id="tableid">
+	      <thead class="theadone">
+	        <tr>
+	          <th >选择</th>
+	          <th >房间号</th>
+	          <th style="width:15%;">接待对象</th>
+	          <th >旅客姓名</th>
+	          <th >换房次数</th>
+	          <th >换房时间</th>
+	          <th >登记时间</th>
+	          <th >结账时间</th>
+	          <th >总费用</th>
+	        </tr>
+	      </thead>
+	      <tbody id="tbody">
+	        <!--<c:forEach items="${list.result}" var="item">
+		        <tr >
+		          <td><input type="radio" name="id" value="${item.id}"></td>
+		          <td>${item.roomNumber}</td>
+		          <c:if test="${item.receiveTargetID==2}">
+		              <td>${item.predetermineReceiveTargeTypeName}</td>
+		          </c:if>
+		          <c:if test="${item.receiveTargetID!=2}">
+		              <td style="width:15%;">${item.receiveTeamName}</td>
+		          </c:if>
+		          <td>${item.passengerName}</td>
+		          <td>${item.changingRoomNumber}</td>
+		          <td>${item.changRoomTime}</td>
+		          <td>${item.registerTime}</td>
+		          <td>${item.payTime}</td>
+		          <td>${item.sumConst}</td>
+		          <td hidden>${item.stayregisterdetailsId}</td>
+		        </tr>
+	        </c:forEach>-->
+	      </tbody>
+	    </table>
+    </div>
+    </div>
+    <div class="span11">
+      <div class="row-fluid">
+        <div class="tcdPageCode" style="text-align:center;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!--js分页插件-->
+  <script src="/static/js/jquery.dataTables.min.js"></script>
+  <script src="/static/js/dataTables.bootstrap.min.js"></script>
+
+ <script type="text/javascript">
+
+
+   function timeSelect(){
+     var datemin=document.getElementById("datemin").value;
+     var datemax=document.getElementById("datemax").value;
+     parent.document.getElementById('Mainid').src='/static/FinancialStatistics/tolist.do?datemin='+
+     datemin+'&datemax='+datemax;
+   }
+   
+   function particulars(){
+     var id=[];
+     var table=document.getElementById("tbody");
+     var selectedIndex="";
+     var stayregisterdetailsId="";
+     var datemin=document.getElementById("datemin").value;
+     var datemax=document.getElementById("datemax").value;
+     $('input[name="id"]:checked').each(function(){             // 遍历获取input被checked的
+  		id.push($(this).val());                             // 获取选中的ID
+  	    selectedIndex=this.parentNode.parentNode.rowIndex;
+  	    stayregisterdetailsId=table.rows[selectedIndex-1].cells[9].innerHTML;
+  	});
+  	if(stayregisterdetailsId==""){
+  	   alert("请选择一个房间再按 详情");
+  	   return false;
+	}
+  	if(id!=""){
+  	   parent.document.getElementById('Mainid').src='/static/FinancialStatistics/toinformation.do?id='
+  	   +id+'&stayregisterdetailsId='+stayregisterdetailsId+'&min='+datemin+'&max='+datemax;
+  	}else{
+  	   alert("请选择一个房间再按 详情");
+  	}
+   }
+   
+   
+   
+   
+  /* 分页要用的 */
+  /*$(".tcdPageCode").createPage({
+     pageCount:${list.totalPage},
+     current:${list.currentPage},
+     backFn:function(p){
+	     var datemin=document.getElementById("datemin").value;
+	     var datemax=document.getElementById("datemax").value;
+	     location.href="/static/FinancialStatistics/tolist.do?currentPage="+p+
+	     "&datemin="+datemin+"&datemax="+datemax;
+     }
+   });*/
+   
+  
+ </script>
+   <script type="text/javascript">
+       $(function () {
+           //提示信息
+           var lang = {
+               "sProcessing": "处理中...",
+               "sLengthMenu": "每页 _MENU_ 项",
+               "sZeroRecords": "没有匹配结果",
+               "sInfo": "当前显示第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
+               "sInfoEmpty": "当前显示第 0 至 0 项，共 0 项",
+               "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+               "sInfoPostFix": "",
+               "sSearch": "搜索:",
+               "sUrl": "",
+               "sEmptyTable": "表中数据为空",
+               "sLoadingRecords": "载入中...",
+               "sInfoThousands": ",",
+               "oPaginate": {
+                   "sFirst": "首页",
+                   "sPrevious": "上页",
+                   "sNext": "下页",
+                   "sLast": "末页",
+                   "sJump": "跳转"
+               },
+               "oAria": {
+                   "sSortAscending": ": 以升序排列此列",
+                   "sSortDescending": ": 以降序排列此列"
+               }
+           };
+
+           //初始化表格
+           var table = $("#tableid").dataTable({
+               dom: 'Bfrtip',//每页显示可调显示数据数量
+               language:lang,  //提示信息
+               autoWidth: false,  //禁用自动调整列宽
+               stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
+               processing: true,  //隐藏加载提示,自行处理
+               serverSide: true,  //启用服务器端分页
+               searching: false,  //禁用原生搜索
+               orderMulti: false,  //启用多列排序
+               order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
+               renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
+               pagingType: "simple_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
+               //渲染
+               columnDefs: [{
+                   "targets": 'nosort',  //列的样式名
+                   "orderable": false    //包含上样式名‘nosort’的禁止排序
+               }],
+               ajax: function (data, callback, settings) {
+                   //封装请求参数
+                   var param = {};
+                   /*踩坑 记得与后端接口接收类型名称对应*/
+                   param.pageSize = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+                   /*param.start = data.start;//开始的记录序号*/
+                   param.pageNum = (data.start / data.length)+1;//当前页码
+                   //console.log(param);
+                   //商品搜索
+                   var searchstr = $("#txtnameid").val();
+                   if(searchstr != "") {
+                       param.search = searchstr;
+                   }
+                   //数据排序 踩坑 要排序就得加
+                   if(data.order.length > 0){
+                       param.order = data.order[0].column;
+                       param.dir = data.order[0].dir;
+                   }
+                   //ajax请求数据
+                   $.ajax({
+                       type: "POST",
+                       url: "/financial/tolist",
+                       contentType: "application/json; charset=utf-8",
+                       cache: false,  //禁用缓存
+                       data: JSON.stringify(param),   //修改提交数据注意
+                       dataType: "json",
+
+                       success: function (result) {
+
+                           //console.log(result);
+                           //setTimeout仅为测试延迟效果
+                           setTimeout(function () {
+                               //封装返回数据
+                               var returnData = {};
+                               returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                               returnData.recordsTotal = result.totalRecord;//返回数据全部记录 ——踩坑 修改2 result.totalRecord要与前端返回的数据格式对应
+                               returnData.recordsFiltered = result.totalRecord;//后台不实现过滤功能，每次查询均视作全部结果——踩坑 修改2
+
+                               if (result.totalRecord == 0) {
+                                   //4.7.4解决空数据时卡顿,就是查不到数据是一直在搜索中
+                                   returnData.data = "";    //返回的数据列表
+                               } else {
+                                   returnData.data = result.result;    //返回的数据列表
+                               }
+
+                               //console.log(returnData);
+                               //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+                               //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                               callback(returnData);
+                           }, 200);
+                       }
+                   });
+               },
+               //列表表头字段
+               /*
+               *
+                 <th >选择</th>
+	          <th >房间号</th>
+	          <th style="width:15%;">接待对象</th>
+	          <th >旅客姓名</th>
+	          <th >换房号码</th>
+	          <th >换房时间</th>
+	          <th >登记时间</th>
+	          <th >结账时间</th>
+	          <th >总费用</th>
+               * */
+               columns: [
+                   { "data": "id" },
+                   { "data": "roomNumber" },
+                   { "data": "predetermineReceiveTargeTypeName" },
+                   { "data": "passengerName" },
+                   { "data": "changingRoomNumber" },
+                   { "data": "changRoomTimeStr" },
+                   { "data": "registerTimeStr" },
+                   { "data": "payTimeStr" },
+                   { "data": "sumConst" }
+               ]
+           }).api();
+           //此处需调用api()方法,否则返回的是JQuery对象而不是DataTables的API对象
+       });
+   </script>
+  </body>
+</html>

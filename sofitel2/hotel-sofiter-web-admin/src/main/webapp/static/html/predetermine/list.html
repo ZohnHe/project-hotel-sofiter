@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title></title>
+
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/css/page.css" type="text/css"/>
+    <link href="/static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">  <!-- start 响应式布局要添加的 -->
+    <!--<script src="/static/bootstrap/js/jquery-3.1.1.min.js"></script>-->
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="http://cdn.bootcss.com/datatables/1.10.11/css/dataTables.bootstrap.min.css" rel="stylesheet"
+          media="screen">
+    <link href="http://cdn.bootcss.com/datatables/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet"
+          media="screen">
+
+    <style>
+
+        .container {
+            margin-top: 10px;
+            margin-left: 0px;
+            margin-right: 0px;
+            width: 98%;
+            font-size: 15px;
+        }
+
+        .span12 {
+            width: 98%;
+        }
+
+        .labelroomnumber {
+            position: relative;
+            font-size: 15px;
+            float: left;
+            margin-top: 15px;
+        }
+
+        .textone {
+            margin-top: 12px;
+        }
+
+        .rightOne {
+            margin-right: 50px;
+            font-size: 15px;
+        }
+
+        .table th, .table td {
+            text-align: center;
+        }
+
+        .theadone {
+            background-color: #CCFF99;
+        }
+
+        .dgvone {
+            margin-top: 12px;
+        }
+
+        .roomnumberwidth {
+            width: 55%;
+        }
+
+        .heigthone {
+            height: 25px;
+        }
+
+        .widthone {
+            width: 100%;
+        }
+
+        .widthtwo {
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container" style="height:630px;overflow-x:auto;">
+    <input type="hidden" id="oneId">     <!-- 房间ID -->
+    <input type="hidden" id="twoId">
+    <div class="span4">
+        <div class="row-fluid">
+            <label class="labelroomnumber">团队/旅客：</label>
+            <input id="txtnameid" name="txtname" class="textone roomnumberwidth"
+                   style="border-radius:0px; border-top-left-radius:4px; border-bottom-left-radius:4px;height:26px;"
+                   type="text" placeholder="请输入关键字" value="">
+            <div class="input-append">
+                <button onclick="selectOne()" class="btn-success textone" style="margin-left:-4px;height:26px;">
+                    <li class="icon-search icon-white"></li>
+                    搜索
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="span2">
+        <select id="stateId" style="width:80%;height:26px; float:left;margin-top:12px;" onchange="selectTwo()">
+            <!--<c:forEach items="${listOne}" var="item">-->
+            <!--<option value="${item.far_id}" <c:if test="${item.far_id==state}">selected="selected"</c:if>>-->
+            <!--${item.attributeDetailsName}-->
+            <!--</option>-->
+            <!--</c:forEach>-->
+
+
+        </select>
+        <!-- 这里要获取房间安排的下拉框   可以写死 value = 46 是已安排 47是未安排 onchange事件没写-->
+    </div>
+
+    <div class="span6">
+        <div class="row-fluid">
+            <div class="span3">
+                <button class="btn btn-info btn-small textone" type="button" onclick="addfunction()">
+                    <li class="icon-plus icon-white"></li>
+                    新增
+                </button>
+            </div>
+            <div class="span3">
+                <button class="btn btn-warning btn-small textone" type="button" onclick="updatefunction()">
+                    <li class="icon-pencil icon-white"></li>
+                    修改
+                </button>
+            </div>
+            <div class="span3">
+                <button class="btn btn-danger btn-small textone" type="button" onclick="deletefunction()">
+                    <li class="icon-remove icon-white"></li>
+                    删除
+                </button>
+            </div>
+            <div class="span3">
+                <button class="btn btn-info btn-small textone" type="button" onclick="arrangeRoom()">
+                    <li class="icon-plus icon-white"></li>
+                    安排房间
+                </button>
+            </div>
+        </div>
+    </div> <!-- 增删改查的4个按钮的盒子 -->
+
+    <br/>
+
+    <div class="span12">
+        <div class="tab table"> <!-- 这个class 样式有问题把 -->
+            <ul class="nav nav-tabs">
+                <li class="active" id="tabOneId"><a href="#tab1" data-toggle="tab">接待对象</a></li>
+                <!-- href指向 id=tab1的列表  -->
+
+                <li><a href="#tab2" data-toggle="tab">旅客信息</a></li>
+            </ul><!-- 两个列表之间的切换 -->
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab1">
+                    <div class="row-fluid">
+                        <div class="span2">
+                            <label>接待对象：</label>
+                            <input id="teamNameId" class="widthone" style="height: 25px;" type="text"
+                                   readonly="readonly">
+                        </div>
+                        <div class="span2">
+                            <label>团队编号：</label>
+                            <input id="teamCodeId" class="widthone" style="height: 25px;" type="text"
+                                   readonly="readonly">
+                        </div>
+                        <div class="span2">
+                            <label>负责人：</label>
+                            <input id="principalId" class="widthone" style="height: 25px;" type="text"
+                                   readonly="readonly">
+                        </div>
+                        <div class="span2">
+                            <label>联系电话：</label>
+                            <input id="contactPhoneNUmberId" class="widthone" style="height: 25px;" type="text"
+                                   readonly="readonly">
+                        </div>
+                        <div class="span2">
+                            <label>登记时间：</label>
+                            <input id="registerTimeId" class="widthone" style="height: 25px;" type="text"
+                                   readonly="readonly">
+                        </div>
+                        <div class="span2" style="margin-top:23px;text-align: center;">
+                            <a data-toggle="modal" class="btn btn-info btn-small"
+                               onclick="selectT()">
+                                <li class="icon-plus icon-white"></li>
+                                选择对象</a>
+                        </div>
+                    </div>
+                </div>  <!-- 列表1 接待对象 -->
+
+
+                <div class="tab-pane" id="tab2">
+                    <div class="row-fluid">
+                        <div class="span2">
+                            <label>姓名：</label>
+                            <input id="nameId" class="widthone" style="height: 25px;" type="text" readonly="readonly">
+                        </div>
+                        <div class="span2">
+                            <label>证件类型：</label>
+                            <input id="papersTypeId" class="widthone" style="height: 25px;" type="text"
+                                   readonly="readonly">
+                        </div>
+                        <div class="span2">
+                            <label>证件号：</label>
+                            <input id="papersNumberId" class="widthone" style="height: 25px;" type="text"
+                                   readonly="readonly">
+                        </div>
+                        <div class="span2">
+                            <label>联系电话：</label>
+                            <input id="contactPhoneNumberId" name="commodityName" class="widthone" style="height: 25px;"
+                                   type="text" readonly="readonly">
+                        </div>
+                        <div class="span2" style="margin-top:23px;;text-align: center;">
+                            <a href="#lvke" data-toggle="modal" class="btn btn-info btn-small" onclick="souSuo()">
+                                <li class="icon-plus icon-white"></li>
+                                选择旅客</a>
+                        </div>
+                    </div>
+                </div>         <!-- 列表2 旅客信息 -->
+
+            </div>
+        </div>
+    </div>
+
+    <div class="span12">
+        <table id="example1" class="display table-striped table-bordered table-hover table-condensed"
+               cellspacing="0" width="100%">
+            <!--<table class="table table-condensed table-bordered table-striped" id="example1">-->
+            <thead class="theadone">
+            <tr>
+                <th>选择</th>
+                <th>房间号</th>
+                <th>客房等级</th>
+                <th>接待对象</th>
+                <th>旅客姓名</th>
+                <th>抵达时间</th>
+                <th>押金</th>
+                <th>预定天数</th>
+                <th>联系电话</th>
+                <th>预定状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+
+            <!--<tbody id="tbody">-->
+            <!-- 这里的数据就要经过ajax 来获取  并且 还需要判断  -->
+            <!--</tbody>-->
+        </table>
+
+
+    </div>
+
+
+    <div class="modal hide fade" id="lvke" style="text-align: center;">
+        <div class="span5" style="width:98%;height:480px; overflow-x:auto;">
+            <div class="row-fluid">
+                <div class="span8">
+                    <label class="labelroomnumber">旅客姓名：</label>
+                    <input id="txtnameidThree" name="txtname" class="textone"
+                           style="width:60%; border-radius:0px; border-top-left-radius:4px; border-bottom-left-radius:4px;height:26px;"
+                           type="text" placeholder="请输入关键字">
+                    <div class="input-append">
+                        <button type="submit" class="btn-success textone" style="margin-left:-4px;height:26px;"
+                                onclick="souSuo()">
+                            <li class="icon-search icon-white"></li>
+                            搜索
+                        </button>
+                    </div>
+                </div>
+
+                <div class="span4">
+                    <button class="btn btn-info btn-small textone" type="button" onclick="confirmfunction()"
+                            data-dismiss="modal">
+                        <li class="icon-plus icon-white"></li>
+                        确定选择
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="dgvone" style="width:93%;">
+                <table class="table table-condensed table-bordered table-striped" id="example2">
+                    <thead class="theadone">
+                    <tr>
+                        <th>选择</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>证件类型</th>
+                        <th>证件号码</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbodyThree">
+                    <!--这里的内容需要用ajax来获取-->
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="span11">
+        <div class="row-fluid">
+            <div class="tcdPageCode" style="text-align:center;"></div>
+        </div>
+    </div>
+
+
+</div>
+
+
+</div>
+
+
+</body>
+
+<div class="modal fade" id="duixiang" style="text-align: center;">
+    <div class="span5" style="width:98%;height:480px; overflow-x:auto;">
+
+        <div class="row-fluid">
+            <div class="span8">
+                <label class="labelroomnumber">团队名称：</label>
+                <input id="txtnameidTwo" name="txtname" class="textone"
+                       style="width:60%; border-radius:0px; border-top-left-radius:4px; border-bottom-left-radius:4px;height:26px;"
+                       type="text" placeholder="请输入关键字"><!--   value="${txtname}"  -->
+                <div class="input-append">
+                    <!-- 通过 selectTarget点击事件 来获取上面的值 搜索-->
+                    <button class="btn-success textone" style="margin-left:-4px;height:26px;"
+                    >
+                        <li class="icon-search icon-white"></li>
+                        搜索
+                    </button>
+                </div>
+
+            </div>
+            <!-- 这个是数据提交  -->
+            <div class="span4">
+                <button class="btn btn-info btn-small textone" type="button" onclick="confirmRarget()"
+                        data-dismiss="modal">
+                    <li class="icon-plus icon-white"></li>
+                    确定选择
+                </button>
+            </div>
+        </div>
+
+        <div class="dgvone" style="width:93%;">
+            <%-- 点击选择对象弹出来的框框 --%>
+            <table class="table table-condensed table-bordered table-striped" id="tableid">
+                <thead class="theadone">
+                <tr>
+                    <th rowspan="2">选择</th>
+                    <th rowspan="2">对象类别</th>
+                    <th rowspan="2">团队名称</th>
+                    <th rowspan="2">团队编号</th>
+                    <th rowspan="2">负责人</th>
+                    <th rowspan="2">登记时间</th>
+                    <th rowspan="2">电话号码</th>
+                </tr>
+                </thead>
+                <tbody id="tbodyTwo">
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 还剩JS代码了 -->
+<!--<script src="/static/js/table/jquery.min.js"></script>-->
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<!--<script src="http://cdn.bootcss.com/datatables/1.10.11/js/jquery.js"></script>-->
+<script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="http://cdn.bootcss.com/datatables/1.10.11/js/jquery.dataTables.min.js"></script>
+<script src="http://cdn.bootcss.com/datatables/1.10.11/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/page.js"></script>
+<script type="text/javascript" src="/static/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="/static/js/common.js"></script>
+
+<!--data table 列表框架-->
+<!--<script type="text/javascript" src="/static/js/table/jquery.dataTables.min.js"></script>-->
+<!--<script type="text/javascript" src="/static/js/table/dataTables.bootstrap.min.js"></script>-->
+<!--<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>-->
+
+<script type="text/javascript">
+    $(function () {
+        //提示信息
+        var lang = {
+            "sProcessing": "处理中...",
+            "sLengthMenu": "每页 _MENU_ 项",
+            "sZeroRecords": "没有匹配结果",
+            "sInfo": "当前显示第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
+            "sInfoEmpty": "当前显示第 0 至 0 项，共 0 项",
+            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            "sInfoPostFix": "",
+            "sSearch": "搜索:",
+            "sUrl": "",
+            "sEmptyTable": "表中数据为空",
+            "sLoadingRecords": "载入中...",
+            "sInfoThousands": ",",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上页",
+                "sNext": "下页",
+                "sLast": "末页",
+                "sJump": "跳转"
+            },
+            "oAria": {
+                "sSortAscending": ": 以升序排列此列",
+                "sSortDescending": ": 以降序排列此列"
+            }
+        };
+
+        // debugger
+        //初始化表格
+        var table = $("#example1").dataTable({
+            dom: 'Bfrtip',
+            language: lang,  //提示信息
+            autoWidth: false,  //禁用自动调整列宽
+            stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
+            processing: true,  //隐藏加载提示,自行处理
+            serverSide: true,  //启用服务器端分页
+            searching: true,  //禁用原生搜索
+            orderMulti: false,  //启用多列排序
+            order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
+            renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
+            pagingType: "simple_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
+            columnDefs: [
+                {
+                    "render": function (data, type, row) {
+                        // return "<input type='checkbox' name='Id' value='" + data + "'>" + data;
+                        return "<input type='checkbox' name='Id' value='" + data + "'>";
+                    },
+                    "targets": 0 //指定渲染列：第一列(渲染第一列为单选框，data自动匹配为  {"data":"id"}中数据）
+                },
+                {
+                    "render": function (data, type, row, meta) {
+                        // return "<input type='checkbox' name='Id' value='" + data + "'>" + data;
+                        return "<input type='button' name='Id' value='删除' onclick='predelete(" + data + ")'>";
+                    },
+                    "targets": 10 //指定渲染列：第一列(渲染第一列为单选框，data自动匹配为  {"data":"id"}中数据）
+                },
+                {
+                    "targets": 'nosort',  //列的样式名
+                    "orderable  ": false    //包含上样式名‘nosort’的禁止排序
+                }],
+            ajax: function (data, callback, settings) {
+                //封装请求参数
+                var param = {};
+                param.pageSize = data.length; //页面显示记录条数，在页面显示每页显示多少项的时候
+                param.start = data.start;    //开始的记录序号
+                param.pageNum = (data.start / data.length) + 1;//当前页码
+
+                //商品搜索
+                //商品搜索
+                if (data.search.value != "") {
+                    param.search = data.search.value;
+                }
+                //数据排序
+                if (data.order.length > 0) {
+                    param.order = data.order[0].column;
+
+
+                    param.dir = data.order[0].dir;
+                }
+                //console.log(param);
+                //ajax请求数据
+                $.ajax({
+                    type: "post",
+                    url: "/pre/list",
+
+                    //不添加这句话时  ajax的提交是通过表单提交的  添加了的话 通过json数据提交
+                    contentType: "application/json;charset=utf-8",
+                    cache: false,  //禁用缓存
+                    data: JSON.stringify(param),  //传入组装的参数
+                    dataType: "json",
+                    success: function (result) {
+                        //TODO 数据都在这个ajax
+                        // if (result.code != "200") {
+                        //     alert(result.msg);
+                        // } else {
+                        //console.log(result);
+                        //setTimeout仅为测试延迟效果
+                        setTimeout(function () {
+                            var returnData = {};
+                            returnData.draw = result.data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                            returnData.recordsTotal = result.data.totalRecord;//返回数据全部记录
+                            returnData.recordsFiltered = result.data.totalRecord;//后台不实现过滤功能，每次查询均视作全部结果
+                            if (result.data.totalRecord == 0) {  //解决空数据时卡顿
+                                returnData.data = "";    //返回的数据列表
+                            } else {
+                                returnData.data = result.data.data;    //返回的数据列表
+                            }//返回的数据列表
+                            //console.log(returnData);
+                            //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+                            //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                            callback(returnData);
+                        }, 200);
+                    }
+                    // }
+                })
+                ;
+            },
+            //列表表头字段
+            columns: [
+                {"data": "id"},
+                {"data": "roomNumber"},
+                {"data": "roomGuestRoomLevelName"},
+                {"data": "receiveTeamName"},
+                {"data": "receivePrincipal"},
+                {"data": "time"},
+                {"data": "deposit"},
+                {"data": "predetermineDay"},
+                {"data": "receiveContactPhoneNUmber"},
+                {"data": "predetermineStateName"},
+                {"data": "id"},
+            ]
+        }).api();
+        //此处需调用api()方法,否则返回的是JQuery对象而不是DataTables的API对象
+
+
+        //用来获取下拉框的ajax
+        // $.ajax({
+        //     type: "post",
+        //     url: "",
+        //
+        //     //不添加这句话时  ajax的提交是通过表单提交的  添加了的话 通过json数据提交
+        //     contentType: "application/json;charset=utf-8",
+        //     cache: false,  //禁用缓存
+        //     dataType: "json",
+        //     success: function (data) {
+        //         if (data.code != "200") {
+        //             alert(data.msg);
+        //         } else {
+        //             setTimeout(function () {
+        //                 for (var i = 0; i < data.data.length;i++){
+        //                     var option = document.createElement("option");
+        //
+        //
+        //                 }
+        //             // <c:forEach items="${lis1tOne}" var="item">
+        //             //     <option value="${item.far_id}" <c:if test="${item.far_id==state}">selected="selected"</c:if>>
+        //             //         ${item.attributeDetailsName}
+        //             //         </option>
+        //             //         </c:forEach>
+        //
+        //
+        //               $("#stateId")
+        //             }, 200);
+        //         }
+        //     }
+        // })
+    });
+
+
+    // $('#duixiang').modal().css({
+    //     'width': '72%',
+    //     'margin-left': function () {
+    //         return -($(this).width() / 2);
+    //     }
+    // });
+    // $('#duixiang').modal('hide');
+
+    function selectT(){
+        document.getElementById("oneId").value=1;
+        document.getElementById("teamNameId").value="深圳市蓝途畅游旅行社有限公司";
+        document.getElementById("teamCodeId").value="LTC82952";
+        document.getElementById("principalId").value="李亚伟";
+        document.getElementById("contactPhoneNUmberId").value="13800138111";
+        document.getElementById("registerTimeId").value="2016-11-20 20:26:12";
+    }
+
+    function selectOne(){
+        var tabel = $('#example1').DataTable();
+        var category_name = $("#txtnameid").val();
+        tabel.search(category_name).draw();
+    }
+
+
+    //增加的js代码
+    function updatefunction(){
+        // debugger
+        var chk_value=[];
+        $('input[name="Id"]:checked').each(function(){
+            chk_value.push($(this).val());
+        });
+
+        if(chk_value!=""){
+            if(chk_value.toString().indexOf(",")>0){
+                alert("修改只能选择一条");
+            }else{
+                var id = chk_value[0];
+                $.getJSON("/pre/setupdataid",{"id":id},function (data) {
+                    alert(data.data.msg);
+                })
+
+                parent.document.getElementById("Mainid").src='../predetermine/update.html';
+            }
+        }else{
+            alert("请选择一条数据进行修改");
+        }
+    }
+
+
+
+    function predelete(index)
+    {
+
+        alert(index)
+        var flag = window.confirm("注意：删除该预订信息会扣除该房间的押金的哦！您确定要永久删除该信息吗?");
+        if (flag) {
+            $.getJSON("/pre/delete",{"id":index},function (data) {
+                // var flag=window.confirm("注意：删除该预订信息会扣除该房间的押金的哦！您确定要永久删除该信息吗?");
+
+                alert(data.data.msg)
+            },"JSON")
+
+            parent.document.getElementById("Mainid").src='/static/html/predetermine/list.html';
+        }
+    }
+
+    function deletefunction(){
+        var chk_value=[];
+        $('input[name="Id"]:checked').each(function(){
+            chk_value.push($(this).val());
+        });
+        if(chk_value != ""){
+            var flag=window.confirm("注意：删除该预订信息会扣除该房间的押金的哦！您确定要永久删除该信息吗?");
+            if(flag){
+                $.getJSON("/pre/delete",{"id":chk_value},function (data) {
+                    alert(data.data.msg);
+                },"JSON")
+
+                parent.document.getElementById("Mainid").src='/static/html/predetermine/list.html';
+            }
+        }else{
+            alert("请选择一条或多条数据进行删除");
+        }
+    }
+
+    function arrangeRoom(){
+        var chk_value=[];
+        $('input[name="Id"]:checked').each(function(){
+            chk_value.push($(this).val());
+        });
+        var id = chk_value;
+        debugger
+        if (chk_value != "") {
+            $.get("/pre/arrangeRoom?id="+id, function (data) {
+                alert(data.msg)
+                if (data.msg == "操作成功") {
+                    alert("请手动点击左侧住宿登记按钮查看")
+                    /* var flag = window.confirm("注意：房间已安排成功，是否转到，住宿登记界面，便于登记旅客信息");
+
+                     if (flag) {
+                         //住宿登记页面  我需要跳过去嘛
+                         parent.document.getElementById("Mainid").src = '/static/html/predetermine/list.html';
+
+                     } else {
+                         parent.document.getElementById("Mainid").src = '/static/html/predetermine/list.html'
+
+                     }*/
+                }
+            })
+        }else {
+            alert("请选择一条或多条数据进行安排房间");
+        }
+
+    }
+
+
+    function addfunction(){
+        debugger
+
+
+
+        var classone=document.getElementById("tabOneId").className;
+        var one=document.getElementById("oneId").value;
+        var two=document.getElementById("twoId").value;
+        var lvKeName=document.getElementById("nameId").value;
+        var teamName=document.getElementById("teamNameId").value;
+        var parm ={}
+        parm.type = 1;
+        parm.name = teamName;
+        parm.id = one;
+        //TODO 直接把这些参数存到后台而已
+
+
+
+        if(classone == "active"){
+            if(one == ""){
+                alert("你还没有添加对象信息哦！")
+            }else{
+                parent.document.getElementById("Mainid").src='../predetermine/add.html';
+                /**//*$.ajax({
+                    type: "post",
+                    url: "/pre/add",
+
+                    //不添加这句话时  ajax的提交是通过表单提交的  添加了的话 通过json数据提交
+                    contentType: "application/json;charset=utf-8",
+                    cache: false,  //禁用缓存
+                    data: JSON.stringify(parm),  //传入组装的参数
+                    dataType: "json",
+                    success: function (result) {
+
+                    }
+                })*/
+                // parent.document.getElementById('Mainid').src='${ctx}/Predetermine/toadd.do?id='+one+
+                //     '&name='+teamName+'&type=1';
+            }
+        }else{
+            if(two == "" ){
+                alert("你还没有添加旅客信息哦！")
+            }else{
+                parent.document.getElementById('Mainid').src='${ctx}/Predetermine/toadd.do?id='+two+
+                    '&name='+lvKeName+'&type=2';
+            }
+        }
+
+    }
+
+
+</script>
+
+</html>
